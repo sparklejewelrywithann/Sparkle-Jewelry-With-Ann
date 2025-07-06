@@ -2,74 +2,59 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Jeannys Shop - Warenkorb</title>
-    <style>
-        body { font-family: sans-serif; padding: 2rem; background: #fdfdfd; }
-        .product { border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; }
-        img { width: 150px; border-radius: 6px; }
-        button { padding: 10px; margin-top: 10px; background-color: #ffc439; border: none; cursor: pointer; }
-        #cart { margin-top: 2rem; border-top: 2px solid #ccc; padding-top: 1rem; }
-        #cartItems { margin-bottom: 1rem; }
-    </style>
+  <meta charset="UTF-8">
+  <title>Jeannys Shop</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fffaf8; }
+    .product {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      background-color: #ffffff;
+    }
+    img {
+      width: 150px;
+      border-radius: 6px;
+    }
+    button {
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #ffc439;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #cart {
+      margin-top: 2rem;
+      padding: 1rem;
+      border: 2px dashed #888;
+      background-color: #f8f8f8;
+    }
+  </style>
 </head>
 <body>
-    <h1>Jeannys Armband-Shop 💜</h1>
+  <h1>Jeannys Armband-Shop 💎</h1>
 
-    <div class="product">
-        <h2>Makramee-Armband mit Seestern</h2>
-        <img src="armband.jpg" alt="Makramee Armband">
-        <p>Preis: 12,00 €</p>
-        <button onclick="addToCart('Makramee-Armband mit Seestern', 12)">In den Warenkorb</button>
-    </div>
+  <div class="product">
+    <h2>Makramee-Armband mit Seestern</h2>
+    <img src="armband.jpg" alt="Makramee Armband">
+    <p>Preis: 6,90 €</p>
+    <button onclick="addToCart('Makramee-Armband mit Seestern')">In den Warenkorb</button>
+  </div>
 
-    <div id="cart">
-        <h2>🛒 Warenkorb</h2>
-        <div id="cartItems"></div>
-        <p id="total"></p>
-        <div id="paypal-button-container"></div>
-    </div>
+  <div id="cart">
+    <h2>🛒 Dein Warenkorb</h2>
+    <ul id="cartItems"></ul>
+  </div>
 
-    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
-    <script>
-        let cart = [];
-
-        function addToCart(name, price) {
-            cart.push({ name, price });
-            renderCart();
-        }
-
-        function renderCart() {
-            const cartItems = document.getElementById('cartItems');
-            const total = document.getElementById('total');
-            cartItems.innerHTML = '';
-            let sum = 0;
-            cart.forEach(item => {
-                cartItems.innerHTML += `<p>${item.name} - €${item.price.toFixed(2)}</p>`;
-                sum += item.price;
-            });
-            total.innerText = `Gesamt: €${sum.toFixed(2)}`;
-        }
-
-        paypal.Buttons({
-            createOrder: function(data, actions) {
-                const totalAmount = cart.reduce((sum, item) => sum + item.price, 0).toFixed(2);
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: totalAmount
-                        }
-                    }]
-                });
-            },
-            onApprove: function(data, actions) {
-                return actions.order.capture().then(function(details) {
-                    alert('Danke für deinen Einkauf, ' + details.payer.name.given_name + '!');
-                    cart = [];
-                    renderCart();
-                });
-            }
-        }).render('#paypal-button-container');
-    </script>
+  <script>
+    function addToCart(item) {
+      const list = document.getElementById('cartItems');
+      const li = document.createElement('li');
+      li.innerText = item;
+      list.appendChild(li);
+    }
+  </script>
 </body>
 </html>
