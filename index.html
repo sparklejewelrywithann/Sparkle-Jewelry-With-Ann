@@ -45,16 +45,41 @@
 
   <div id="cart">
     <h2>🛒 Dein Warenkorb</h2>
-    <ul id="cartItems"></ul>
-  </div>
 
-  <script>
-    function addToCart(item) {
-      const list = document.getElementById('cartItems');
-      const li = document.createElement('li');
-      li.innerText = item;
-      list.appendChild(li);
+    <ul id="cartItems"></ul>
+</div>
+
+<!-- PayPal Button -->
+<div id="paypal-button-container" style="margin-top: 20px;"></div>
+
+<!-- PayPal SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
+
+<script>
+  function addToCart(item) {
+    const list = document.getElementById("cartItems");
+    const li = document.createElement("li");
+    li.innerText = item;
+    list.appendChild(li);
+  }
+
+  // PayPal-Button erstellen
+  paypal.Buttons({
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: '6.90' // Fester Preis – später machen wir ihn dynamisch
+          }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        alert('Danke, ' + details.payer.name.given_name + '! Zahlung erfolgreich.');
+      });
     }
-  </script>
+  }).render('#paypal-button-container');
+</script>
 </body>
 </html>
